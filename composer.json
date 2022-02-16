@@ -1,0 +1,24 @@
+{
+  "name": "rusbios/system",
+  "description": "systems job",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Ryssia",
+      "email": "info@rysbios.ru"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "RB\\System\\": "src"
+    }
+  },
+  "require": {
+    "symfony/console": "^5.4",
+    "symfony/dependency-injection": "5.4.x-dev",
+    "symfony/finder": "5.4.x-dev",
+    "symfony/dotenv": "5.4.x-dev",
+    "phpmailer/phpmailer": "dev-master"
+  }
+}

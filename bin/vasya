@@ -1,0 +1,13 @@
+<?php
+
+defined('CLI') or define('CLI', true);
+
+require __DIR__ . '/../bootstrap.php';
+
+$app = new Symfony\Component\Console\Application();
+$config = RB\System\App\Config::create();
+
+$app->add(new RB\System\Command\MailSenderCommand(RB\System\Service\Mailer::create($config)));
+$app->add(new RB\System\Command\TelegramBotToMailCommand());
+
+$app->run();
