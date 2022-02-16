@@ -19,6 +19,7 @@
     "symfony/dependency-injection": "5.4.x-dev",
     "symfony/finder": "5.4.x-dev",
     "symfony/dotenv": "5.4.x-dev",
-    "phpmailer/phpmailer": "dev-master"
+    "phpmailer/phpmailer": "dev-master",
+    "ext-curl": "*"
   }
 }
