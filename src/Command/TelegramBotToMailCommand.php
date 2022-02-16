@@ -8,11 +8,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TelegramBotToMailCommand extends Command
 {
-    protected static $defaultName = 'bot:telegram-to-mail';
+    protected static $defaultName = 'demon:telegram-bot:mail';
     protected static $defaultDescription = 'Telegram bot service sent mail';
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
+        return Command::SUCCESS;
     }
 }

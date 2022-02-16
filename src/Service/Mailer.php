@@ -39,7 +39,7 @@ class Mailer
         $this->mailer->CharSet = 'UTF-8';
         $this->mailer->isSMTP();
         $this->mailer->SMTPAuth = true;
-//        $this->mailer->SMTPDebug = 1;
+        $this->mailer->SMTPDebug = (int)$this->config->getEnv()->isDebug();
         $this->mailer->Host = $config['encryption'] . '://' . $config['host'];
         $this->mailer->Port = $config['port'];
         $this->mailer->Username = $config['username'];
@@ -49,7 +49,7 @@ class Mailer
         if ($configFrom) {
             $this->mailer->setFrom($configFrom['address'], $configFrom['name']);
         } else {
-            $this->mailer->setFrom($config['username']);
+            $this->mailer->setFrom($config['username'], $this->config->getEnv()->getName());
         }
     }
 
