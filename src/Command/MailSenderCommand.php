@@ -2,7 +2,7 @@
 
 namespace RB\System\Command;
 
-use RB\System\Service\Mailer;
+use RB\System\Service\MailService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,9 +12,9 @@ class MailSenderCommand extends Command
     protected static $defaultName = 'demon:mail-sender';
     protected static $defaultDescription = 'send mails from queue';
 
-    private Mailer $mailer;
+    private MailService $mailer;
 
-    public function __construct(Mailer $mailer)
+    public function __construct(MailService $mailer)
     {
         $this->mailer = $mailer;
         parent::__construct();

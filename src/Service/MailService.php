@@ -5,7 +5,7 @@ namespace RB\System\Service;
 use PHPMailer\PHPMailer\PHPMailer;
 use RB\System\App\Config;
 
-class Mailer
+class MailService
 {
     private static self $obj;
 

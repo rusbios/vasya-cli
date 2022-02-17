@@ -4,15 +4,16 @@ namespace RB\System\Service\Http;
 
 class Request
 {
-    public const METHOD_GET = 'get';
-    public const METHOD_POST = 'post';
-    public const METHOD_PUT = 'put';
-    public const METHOD_DELETE = 'delete';
+    public const METHOD_GET = 'GET';
+    public const METHOD_POST = 'POST';
+    public const METHOD_PUT = 'PUT';
+    public const METHOD_DELETE = 'DELETE';
 
-    private ?string $method;
-    private ?string $url;
-    private ?array $body;
-    private ?int $timeOut;
+    private ?string $method = null;
+    private ?string $url = null;
+    private ?array $body = null;
+    private ?int $timeOut = null;
+    private array $headers = [];
 
     public function getMethod(): ?string
     {
@@ -55,6 +56,26 @@ class Request
     public function setTimeOut(int $timeOut): self
     {
         $this->timeOut = $timeOut;
+        return $this;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    public function setHeaders(array $headers): self
+    {
+        $this->headers = [];
+        foreach ($headers as $key => $value) {
+            $this->addHeaders($key, $value);
+        }
+        return $this;
+    }
+
+    public function addHeaders(string $name, string $value): self
+    {
+        $this->headers[] = $name . ': ' . $value;
         return $this;
     }
 }

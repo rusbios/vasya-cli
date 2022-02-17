@@ -5,14 +5,14 @@ namespace RB\System\Service\Http;
 class Response
 {
     private array $curlInfo;
-    private array $body;
+    private ?array $body = null;
 
     public function __construct(array $curlInfo)
     {
         $this->curlInfo = $curlInfo;
     }
 
-    public function getBody(): array
+    public function getBody(): ?array
     {
         return $this->body;
     }
