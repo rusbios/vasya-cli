@@ -1,12 +1,17 @@
 <?php
 
+use RB\System\Service\TelegramBots\Command\SendMailCommand;
+
 return [
-    'bots' => [
-        'mail' => [
-            'token' => $_ENV['TELEGRAM_TOKEN_BOT_MAIL'] ?? null,
+    'token' => $_ENV['TELEGRAM_TOKEN_COMMAND'] ?? null,
+    'commands' => [
+        'start' => [
+            'class' => null,
+            'description' => 'Нифо',
         ],
-        'command' => [
-            'token' => $_ENV['TELEGRAM_TOKEN_COMMAND'] ?? null,
+        'send_mail' => [
+            'class' => SendMailCommand::class,
+            'description' => 'Отправить email',
         ],
     ],
 ];

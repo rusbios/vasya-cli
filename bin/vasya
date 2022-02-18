@@ -4,7 +4,7 @@ use RB\System\App\Config;
 use RB\System\Command\{MailSenderCommand, TelegramBotToMailCommand};
 use RB\System\Service\Http\HttpService;
 use RB\System\Service\MailService;
-use RB\System\Service\TelegramBots\TelegramToMailService;
+use RB\System\Service\TelegramBots\TelegramService;
 
 defined('CLI') or define('CLI', true);
 
@@ -14,6 +14,6 @@ $app = new Symfony\Component\Console\Application();
 $config = Config::create();
 
 $app->add(new MailSenderCommand(MailService::create($config)));
-$app->add(new TelegramBotToMailCommand(new TelegramToMailService($config, new HttpService())));
+$app->add(new TelegramBotToMailCommand(new TelegramService($config->getValue('telegram.token'), new HttpService()), $config));
 
 $app->run();

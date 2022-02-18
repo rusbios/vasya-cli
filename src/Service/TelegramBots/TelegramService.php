@@ -5,7 +5,7 @@ namespace RB\System\Service\TelegramBots;
 use RB\System\Exception\TelegramException;
 use RB\System\Service\Http\{HttpService, Request, Response};
 
-class BaseTelegramService
+class TelegramService
 {
     private const BASE_URL = 'https://api.telegram.org/bot%s/%s';
     private const TIME_OUT = 5;
