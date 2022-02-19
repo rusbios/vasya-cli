@@ -62,4 +62,9 @@ class MailService
 
         return $this->mailer->send();
     }
+
+    public static function isValidEmail(string $email): bool
+    {
+        return (bool)filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
 }

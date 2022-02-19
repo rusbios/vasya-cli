@@ -78,18 +78,20 @@ class SendMailCommand extends AbstractCommand
             // заполняем данные для отправки
             switch (true) {
                 case empty($this->mail->getEmailTo()):
-                    $this->mail->setEmailTo(trim($message->getText()));
+                    if (MailService::isValidEmail($message->getText())) {
+                        $this->mail->setEmailTo($message->getText());
+                    }
                     break;
                 case empty($this->mail->getNameTo()):
-                    $this->mail->setNameTo(trim($message->getText()));
+                    $this->mail->setNameTo($message->getText());
                     break;
 
                 case empty($this->mail->getSubject()):
-                    $this->mail->setSubject(trim($message->getText()));
+                    $this->mail->setSubject($message->getText());
                     break;
 
                 case empty($this->mail->getBody()):
-                    $this->mail->setBody(trim($message->getText()));
+                    $this->mail->setBody($message->getText());
                     break;
             }
 
