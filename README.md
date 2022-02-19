@@ -1,0 +1,2 @@
+# vasya-cli
+cli Vasya
