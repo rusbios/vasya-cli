@@ -54,4 +54,10 @@ class Config
 
         return $this->env;
     }
+
+    public function getAppVersion(): string
+    {
+        $composerJson = file_get_contents(BASE_PATH . '/composer.json');
+        return json_decode($composerJson, true)['version'];
+    }
 }

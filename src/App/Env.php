@@ -21,11 +21,6 @@ class Env
         return $this->config->getValue($name, $default);
     }
 
-    public function getVersion(): string
-    {
-        return $this->getConfig('app.version', '1.0.0');
-    }
-
     public function getName(): string
     {
         return $this->getConfig('app.name', '');

@@ -31,6 +31,7 @@ class SendMailCommand extends AbstractCommand
     public function step(): self
     {
         $message = $this->getLastMessage();
+        $this->messages = [];
 
         $this->telegramService->sendCommand(TelegramService::COMMAND_DELETE_MESSAGE, [
             'chat_id' => $message->getChat()['id'],
