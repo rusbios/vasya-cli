@@ -2,6 +2,7 @@
   "name": "rusbios/system",
   "description": "systems job",
   "minimum-stability": "dev",
+  "version": "1.0.0",
   "license": "proprietary",
   "authors": [
     {

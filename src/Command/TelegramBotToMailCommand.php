@@ -3,6 +3,7 @@
 namespace RB\System\Command;
 
 use RB\System\App\Config;
+use RB\System\Exception\CanselCommandException;
 use RB\System\Exception\TelegramException;
 use RB\System\Service\TelegramBots\Command\AbstractCommand;
 use RB\System\Service\TelegramBots\Command\CommandInterface;
@@ -30,48 +31,58 @@ class TelegramBotToMailCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->setCommand();
-        $updateId = -1;
+        try {
+            $this->setCommand();
+            $updateId = -1;
 
-        while (true) {
-            $result = $this->baseService->sendCommand(TelegramService::COMMAND_GET_UPDATE, [
-                'allowed_updates' => ["message"],
-                'offset' => $updateId,
-            ]);
+            while (true) {
+                $result = $this->baseService->sendCommand(TelegramService::COMMAND_GET_UPDATE, [
+                    'allowed_updates' => ["message"],
+                    'offset' => $updateId,
+                ]);
 
-            if (!$result->getBody()['ok']) {
-                $output->writeln('telegram api error', self::FAILURE);
+                if (!$result->getBody()['ok']) {
+                    $output->writeln('telegram api error', self::FAILURE);
+                }
+
+                foreach ($result->getBody()['result'] as $item) {
+                    $message = new TelegramMessageDTO($item);
+                    $updateId = $message->getUpdateId();
+                    $updateId++;
+                    $output->writeln(sprintf('updId: %s, text: %s', $message->getUpdateId(), $message->getText()));
+
+                    $command = $this->makeCommandService($message);
+                    try {
+                        if (!empty($command)) $command->step();
+                    } catch (CanselCommandException $e) {
+                        AbstractCommand::clear($message->getChat()['id']);
+                    }
+                }
+
+                empty($command)
+                    ? usleep(CommandInterface::SLEEP_INTERVAL_TIME)
+                    : usleep(CommandInterface::ACTIVE_INTERVAL_TIME);
             }
-
-            foreach ($result->getBody()['result'] as $item) {
-                $message = new TelegramMessageDTO($item);
-                $updateId = $message->getUpdateId();
-
-                $command = $this->makeCommandService($message);
-                if (!empty($command)) $command->step();
-            }
-
-            $updateId++;
-            empty($command)
-                ? usleep(CommandInterface::SLEEP_INTERVAL_TIME)
-                : usleep(CommandInterface::ACTIVE_INTERVAL_TIME);
+        } catch (TelegramException $e) {
+            sleep(60);
+            $this->execute($input, $output);
         }
+
+        return Command::FAILURE;
     }
 
     private function makeCommandService(TelegramMessageDTO $messageDTO): ?CommandInterface
     {
         if (AbstractCommand::getCommandByChatId($messageDTO->getChat()['id'])) {
-            return AbstractCommand::getCommandByChatId($messageDTO->getChat()['id']);
+            return AbstractCommand::getCommandByChatId($messageDTO->getChat()['id'])
+                ->addMessage($messageDTO);
         }
 
-        if (preg_match('/^\/(.*)$/', $messageDTO->getText(), $matches) === false) {
+        if (!AbstractCommand::isCommand($messageDTO->getText())) {
             return null;
         }
 
-        if (!in_array($matches[1], array_keys($this->commands))) {
-            return null;
-            throw new TelegramException('command not found');
-        }
+        preg_match('/^\/(.*)$/', $messageDTO->getText(), $matches);
 
         /** @var CommandInterface $class */
         $class = $this->commands[$matches[1]]['class'];

@@ -16,12 +16,14 @@ class TelegramService
     public const COMMAND_GET_UPDATE = 'getUpdates';
     public const COMMAND_DELETE_MESSAGE = 'deleteMessage';
     public const COMMAND_SEND_MESSAGE = 'sendMessage';
+    public const COMMAND_EDIT_MESSAGE_TEXT = 'editMessageText';
     public const COMMAND_SET_MY_COMMANDS = 'setMyCommands';
 
     public const COMMANDS = [
         self::COMMAND_GET_UPDATE,
         self::COMMAND_DELETE_MESSAGE,
         self::COMMAND_SEND_MESSAGE,
+        self::COMMAND_EDIT_MESSAGE_TEXT,
         self::COMMAND_SET_MY_COMMANDS,
     ];
 

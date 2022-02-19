@@ -49,6 +49,11 @@ abstract class AbstractCommand implements CommandInterface
         return self::$activeCommands[$chatId];
     }
 
+    public static function isCommand(string $text): bool
+    {
+        return preg_match('/^\/(.*)$/', $text) > 0;
+    }
+
     public function addMessage(TelegramMessageDTO $message): CommandInterface
     {
         $this->messages[$message->getMessageId()] = $message;
@@ -60,8 +65,8 @@ abstract class AbstractCommand implements CommandInterface
         return $this->messages[max(array_keys($this->messages))];
     }
 
-    protected function isCommand(string $text): bool
+    public function isCanselCommand(string $text): bool
     {
-        return preg_match('/^\/(.*)$/', $text) > 0;
+        return self::isCommand($text) && $text == '/cansel';
     }
 }
