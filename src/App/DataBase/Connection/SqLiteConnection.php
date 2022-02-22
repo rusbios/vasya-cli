@@ -1,6 +1,6 @@
 <?php
 
-namespace RB\System\Service\DataBase\Connection;
+namespace RB\System\App\DataBase\Connection;
 
 use DateTimeInterface;
 use RB\System\App\Config;
@@ -28,6 +28,9 @@ class SqLiteConnection implements ConnectionInterface
         $this->connect = new SQLite3($path);
     }
 
+    /**
+     * @throws DataBaseException
+     */
     public function query(string $sql): array
     {
         $res = $this->connect->query($sql);
@@ -42,6 +45,9 @@ class SqLiteConnection implements ConnectionInterface
 
     }
 
+    /**
+     * @throws DataBaseException
+     */
     public function insert(string $table, array $params = []): int
     {
         $params = $this->escapeKeyValue($params);
@@ -55,6 +61,9 @@ class SqLiteConnection implements ConnectionInterface
         return $this->connect->lastInsertRowID();
     }
 
+    /**
+     * @throws DataBaseException
+     */
     public function update(string $table, array $wheres = [], array $params = []): array
     {
         $params = $this->escapeKeyValue($params);
@@ -75,6 +84,9 @@ class SqLiteConnection implements ConnectionInterface
         return $result ?? [];
     }
 
+    /**
+     * @throws DataBaseException
+     */
     public function delete(string $table, array $wheres = []): array
     {
         $sql = 'delete from `'.$table.'`'.$this->getSqlWheres($wheres).';';

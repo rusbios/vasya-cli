@@ -1,6 +1,6 @@
 <?php
 
-namespace RB\System\Service\DataBase\Connection;
+namespace RB\System\App\DataBase\Connection;
 
 interface ConnectionInterface
 {

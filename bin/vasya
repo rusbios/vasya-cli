@@ -2,7 +2,8 @@
 
 use RB\System\App\Config;
 use RB\System\Command\{MailSenderCommand, MigrationCommand, TelegramBotToMailCommand};
-use RB\System\Service\{DBService, MailService};
+use RB\System\Service\MailService;
+use RB\System\App\DBFactory;
 use RB\System\Service\Http\HttpService;
 use RB\System\Service\TelegramBots\TelegramService;
 
@@ -12,7 +13,7 @@ require __DIR__ . '/../bootstrap.php';
 
 $app = new Symfony\Component\Console\Application();
 $config = Config::create();
-$db = DBService::create($config);
+$db = DBFactory::create($config);
 
 $app->add(new MailSenderCommand(MailService::create($config)));
 $app->add(new TelegramBotToMailCommand(new TelegramService($config->getValue('telegram.token'), new HttpService()), $config));

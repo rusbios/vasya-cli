@@ -147,15 +147,14 @@ class SendMailCommand extends AbstractCommand
                     'message_id' => $this->answerMessageId,
                     'text' => ($isSendMail) ? 'Сообщение с темой "'.$this->mail->getSubject().'" отправленно' : 'Всё пошло не по плану',
                 ]);
-                throw new CanselCommandException();
             } else {
                 $this->telegramService->sendCommand(TelegramService::COMMAND_EDIT_MESSAGE_TEXT, [
                     'chat_id' => $message->getChat()['id'],
                     'message_id' => $this->answerMessageId,
-                    'text' => 'Сообщение с темой "'.$this->mail->getSubject().'" удалено',
+                    'text' => 'Сообщение с темой "' . $this->mail->getSubject() . '" удалено',
                 ]);
-                throw new CanselCommandException();
             }
+            throw new CanselCommandException();
         }
 
         return $this;

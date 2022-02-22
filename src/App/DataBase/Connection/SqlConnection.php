@@ -1,8 +1,6 @@
 <?php
 
-namespace RB\System\Service\DataBase\Connection;
-
-use RB\System\App\Config;
+namespace RB\System\App\DataBase\Connection;
 
 class SqlConnection extends SqLiteConnection implements ConnectionInterface
 {

@@ -2,8 +2,8 @@
 
 namespace RB\System\Command;
 
-use RB\System\Service\DataBase\Migration;
-use RB\System\Service\DBService;
+use RB\System\App\DataBase\Migration;
+use RB\System\App\DBFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,7 +15,7 @@ class MigrationCommand extends Command
 
     private Migration $migration;
 
-    public function __construct(DBService $DBService)
+    public function __construct(DBFactory $DBService)
     {
         $this->migration = new Migration($DBService->getConnection());
         parent::__construct();

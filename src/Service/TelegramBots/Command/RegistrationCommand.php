@@ -2,12 +2,24 @@
 
 namespace RB\System\Service\TelegramBots\Command;
 
+use RB\System\App\Config;
 use RB\System\Exception\CanselCommandException;
+use RB\System\Exception\DataBaseException;
+use RB\System\Service\DBFactory;
+use RB\System\Service\TelegramBots\Models\TelegramMessageDTO;
 use RB\System\Service\TelegramBots\TelegramService;
 
-class RunLocalCliCommand extends AbstractCommand
+class RegistrationCommand extends AbstractCommand
 {
     private ?int $answerMessageId = null;
+
+    private DBFactory $dbService;
+
+    public function __construct(TelegramMessageDTO $message, TelegramService $service, Config $config)
+    {
+        parent::__construct($message, $service, $config);
+        $this->dbService = DBFactory::create($config);
+    }
 
     public function step(): CommandInterface
     {
@@ -22,29 +34,34 @@ class RunLocalCliCommand extends AbstractCommand
         if (!$this->answerMessageId) {
             $this->answerMessageId = $this->telegramService->sendCommand(TelegramService::COMMAND_SEND_MESSAGE, [
                 'chat_id' => $message->getChat()['id'],
-                'text' => 'Готов к выполнению команды',
+                'text' => 'Придумайте пароль',
             ])->getBody()['result']['message_id'];
             return $this;
         }
 
-        if (preg_match('/^demon:(.*)$/', $message->getText(), $matches) > 0) {
-            $command = $matches[1] . ' > /dev/null 2>&1 & echo $!;';
-            $pid = exec($command);
+        try {
+            $this->dbService->getConnection()->insert('user', [
+                'name' => trim(join(' ', [
+                    $message->getFrom()['first_name'],
+                    $message->getFrom()['last_name'],
+                ])),
+                'login' => $message->getFrom()['username'],
+                'password' => $message->getText(),
+            ]);
 
             $this->telegramService->sendCommand(TelegramService::COMMAND_EDIT_MESSAGE_TEXT, [
                 'chat_id' => $message->getChat()['id'],
                 'message_id' => $this->answerMessageId,
-                'text' => $matches[1] . "\nPID: " . $pid,
+                'text' => 'Вы успешно зарегистрировались',
             ]);
-        } else {
-            $result = exec($message->getText());
+            throw new CanselCommandException();
+        } catch (DataBaseException $e) {
             $this->telegramService->sendCommand(TelegramService::COMMAND_EDIT_MESSAGE_TEXT, [
                 'chat_id' => $message->getChat()['id'],
                 'message_id' => $this->answerMessageId,
-                'text' => $message->getText() . "\n----------\n" . $result,
+                'text' => 'Всё пошло не поплану',
             ]);
+            throw new CanselCommandException();
         }
-
-        throw new CanselCommandException();
     }
 }

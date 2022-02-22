@@ -1,12 +1,11 @@
 <?php
 
-namespace RB\System\Service;
+namespace RB\System\App;
 
-use RB\System\App\Config;
-use RB\System\Service\DataBase\Connection\{ConnectionInterface, SqlConnection, SqLiteConnection};
+use RB\System\App\DataBase\Connection\{ConnectionInterface, SqlConnection, SqLiteConnection};
 use RB\System\Exception\DataBaseException;
 
-class DBService
+class DBFactory
 {
     private static ?self $obj = null;
 

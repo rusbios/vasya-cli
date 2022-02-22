@@ -1,6 +1,6 @@
 <?php
 
-use RB\System\Service\DataBase\Connection\ConnectionInterface;
+use RB\System\App\DataBase\Connection\ConnectionInterface;
 
 return [
     'default' => $_ENV['DB_CONNECTION'] ?? ConnectionInterface::SQLITE_CONNECTION,

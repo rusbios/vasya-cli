@@ -1,8 +1,8 @@
 <?php
 
-namespace RB\System\Service\DataBase\Migrations;
+namespace RB\System\App\DataBase\Migrations;
 
-use RB\System\Service\DataBase\Connection\ConnectionInterface;
+use RB\System\App\DataBase\Connection\ConnectionInterface;
 
 class CreateMigrationTable202202202131 implements MigrationInterface
 {

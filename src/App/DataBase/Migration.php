@@ -1,14 +1,14 @@
 <?php
 
-namespace RB\System\Service\DataBase;
+namespace RB\System\App\DataBase;
 
 use RB\System\Exception\DataBaseException;
-use RB\System\Service\DataBase\Connection\ConnectionInterface;
+use RB\System\App\DataBase\Connection\ConnectionInterface;
 
 class Migration
 {
-    private const DIR = BASE_PATH . '/src/Service/DataBase/Migrations/';
-    private const NAMESPACE = 'RB\System\Service\DataBase\Migrations\\';
+    private const DIR = BASE_PATH . '/src/App/DataBase/Migrations/';
+    private const NAMESPACE = 'RB\System\App\DataBase\Migrations\\';
 
     private ConnectionInterface $connection;
 
