@@ -2,12 +2,25 @@
 
 namespace RB\System\Service\TelegramBots\Command;
 
+use RB\System\App\Config;
+use RB\System\App\DataBase\AllRepository;
+use RB\System\App\DBFactory;
 use RB\System\Exception\CanselCommandException;
+use RB\System\Service\TelegramBots\AuthUserTrait;
+use RB\System\Service\TelegramBots\Models\TelegramMessageDTO;
 use RB\System\Service\TelegramBots\TelegramService;
 
 class RunLocalCliCommand extends AbstractCommand
 {
+    use AuthUserTrait;
+
     private ?int $answerMessageId = null;
+
+    public function __construct(TelegramMessageDTO $message, TelegramService $service, Config $config)
+    {
+        parent::__construct($message, $service, $config);
+        $this->repository = new AllRepository(DBFactory::create($config)->getConnection());
+    }
 
     public function step(): CommandInterface
     {
@@ -18,6 +31,15 @@ class RunLocalCliCommand extends AbstractCommand
             'chat_id' => $message->getChat()['id'],
             'message_id' => $message->getMessageId(),
         ]);
+
+        $user = $this->getUser($message);
+        if (!$user || !$user->isAuth() || !$user->isAdminRole()) {
+            $this->telegramService->sendCommand(TelegramService::COMMAND_SEND_MESSAGE, [
+                'chat_id' => $message->getChat()['id'],
+                'text' => 'Недостаточно прав для выполнения этой команды',
+            ])->getBody()['result']['message_id'];
+            throw new CanselCommandException();
+        }
 
         if (!$this->answerMessageId) {
             $this->answerMessageId = $this->telegramService->sendCommand(TelegramService::COMMAND_SEND_MESSAGE, [
