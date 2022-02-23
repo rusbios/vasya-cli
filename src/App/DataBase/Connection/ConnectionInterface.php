@@ -18,4 +18,6 @@ interface ConnectionInterface
     public function isConnect(): bool;
 
     public function escape($value);
+
+    public function getSqlWheres(array $wheres = []): string;
 }

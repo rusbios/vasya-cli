@@ -2,7 +2,7 @@
 
 namespace RB\System\Service\TelegramBots;
 
-use RB\System\Exception\TelegramException;
+use RB\System\Exception\{HttpException, TelegramException};
 use RB\System\Service\Http\{HttpService, Request, Response};
 
 class TelegramService
@@ -33,6 +33,10 @@ class TelegramService
         $this->httpService = $httpService;
     }
 
+    /**
+     * @throws TelegramException
+     * @throws HttpException
+     */
     public function sendCommand(string $command, ?array $params = null): Response
     {
         if (!in_array($command, self::COMMANDS, true)) {

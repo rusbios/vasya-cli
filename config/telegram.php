@@ -2,6 +2,7 @@
 
 use RB\System\Service\TelegramBots\Command\{
     LoginCommand,
+    LogoutCommand,
     RegistrationCommand,
     RunLocalCliCommand,
     SendMailCommand
@@ -22,13 +23,13 @@ return [
             'class' => LoginCommand::class,
             'description' => 'Авторизация в системе',
         ],
-        'logout' => [
-            'class' => LoginCommand::class,
-            'description' => 'Разавторизоватся',
-        ],
         'registration' => [
             'class' => RegistrationCommand::class,
             'description' => 'Зарегистрироватся',
+        ],
+        'logout' => [
+            'class' => LogoutCommand::class,
+            'description' => 'Разавторизоватся',
         ],
     ],
 ];

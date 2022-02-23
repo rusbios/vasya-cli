@@ -2,6 +2,7 @@
 
 namespace RB\System\Service;
 
+use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use RB\System\App\Config;
 
@@ -13,6 +14,9 @@ class MailService
 
     private PHPMailer $mailer;
 
+    /**
+     * @throws Exception
+     */
     private function __construct(?Config $config = null)
     {
         $this->config = $config ?: Config::create();
@@ -28,6 +32,10 @@ class MailService
         return self::$obj;
     }
 
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
     private function init(): void
     {
         $config = $this->config->getValue('mail.connect');
@@ -53,6 +61,9 @@ class MailService
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function send(string $email, string $subject, string $bodyHtml, ?string $name): bool
     {
         $this->mailer->clearAddresses();

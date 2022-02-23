@@ -12,11 +12,16 @@ class CreateUserTable202202202309 implements MigrationInterface
     `id` integer primary key autoincrement,
     `name` varchar null,
     `telegram_login` varchar null,
+    `telegram_chat_id` integer null,
+    `role` integer not null default 0,
+    `password` varchar(255) not null,
+    `is_auth` integer(1) not null default 0,
     `create_ts` datetime not null default CURRENT_TIMESTAMP,
     `update_ts` datetime null,
     `delete_ts` datetime null,
     
-    unique (`telegram_login`)
+    unique (`telegram_login`),
+    unique (`telegram_chat_id`)
 );';
         $connection->query($sql);
     }

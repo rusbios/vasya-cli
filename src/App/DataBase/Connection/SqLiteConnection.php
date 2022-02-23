@@ -42,7 +42,6 @@ class SqLiteConnection implements ConnectionInterface
             $result[] = $row;
         }
         return $result ?? [];
-
     }
 
     /**
@@ -91,15 +90,7 @@ class SqLiteConnection implements ConnectionInterface
     {
         $sql = 'delete from `'.$table.'`'.$this->getSqlWheres($wheres).';';
 
-        $res = $this->connect->query($sql);
-        if ($res === false) {
-            throw new DataBaseException($this->connect->lastErrorMsg());
-        }
-
-        while ($row = $res->fetchArray()) {
-            $result[] = $row;
-        }
-        return $result ?? [];
+        return $this->query($sql);
     }
 
     public function isConnect(): bool
@@ -143,7 +134,7 @@ class SqLiteConnection implements ConnectionInterface
         return  $res;
     }
 
-    protected function getSqlWheres(array $wheres = []): string
+    public function getSqlWheres(array $wheres = []): string
     {
         if (empty($wheres)) {
             return '';
