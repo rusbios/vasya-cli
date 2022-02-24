@@ -3,6 +3,7 @@
 namespace RB\System\App\DataBase\Model;
 
 use DateTime;
+use RB\System\App\DataBase\Connection\ConnectionInterface;
 
 abstract class AbstractModel implements ModelInterface
 {
@@ -14,9 +15,9 @@ abstract class AbstractModel implements ModelInterface
     {
         return [
             $this->getPrimaryKeyName() => $this->getPrimaryKey(),
-            'create_ts' => $this->getCreateTs() ? $this->getCreateTs()->format(self::DATE_TIME_FORMAT) : null,
-            'update_ts' => $this->getUpdateTs() ? $this->getUpdateTs()->format(self::DATE_TIME_FORMAT) : null,
-            'delete_ts' => $this->getDeleteTs() ? $this->getDeleteTs()->format(self::DATE_TIME_FORMAT) : null,
+            'create_ts' => $this->getCreateTs() ? $this->getCreateTs()->format(ConnectionInterface::DATE_TIME_FORMAT) : null,
+            'update_ts' => $this->getUpdateTs() ? $this->getUpdateTs()->format(ConnectionInterface::DATE_TIME_FORMAT) : null,
+            'delete_ts' => $this->getDeleteTs() ? $this->getDeleteTs()->format(ConnectionInterface::DATE_TIME_FORMAT) : null,
         ];
     }
 

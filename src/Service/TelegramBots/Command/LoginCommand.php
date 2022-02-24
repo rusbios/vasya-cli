@@ -3,6 +3,7 @@
 namespace RB\System\Service\TelegramBots\Command;
 
 use RB\System\App\{Config, DBFactory};
+use RB\System\App\DataBase\Model\UserModel;
 use RB\System\App\DataBase\AllRepository;
 use RB\System\Exception\CanselCommandException;
 use RB\System\Helper\PasswordHelper;
@@ -19,6 +20,7 @@ class LoginCommand extends AbstractCommand
     {
         parent::__construct($message, $service, $config);
         $this->repository = new AllRepository(DBFactory::create($config)->getConnection());
+        $this->user = new UserModel();
     }
 
     public function step(): CommandInterface
@@ -31,10 +33,9 @@ class LoginCommand extends AbstractCommand
             'message_id' => $message->getMessageId(),
         ]);
 
-        // проверяем авторизацию
         $user = $this->getUser($message);
 
-        if ($user && $user->getTelegramLogin() && $user->isAuth()) {
+        if ($user && $this->user->isAuth()) {
             $this->telegramService->sendCommand(TelegramService::COMMAND_SEND_MESSAGE, [
                 'chat_id' => $message->getChat()['id'],
                 'text' => 'Вы уже авторизированны',
@@ -58,8 +59,8 @@ class LoginCommand extends AbstractCommand
         }
 
         if (PasswordHelper::isVerify($message->getText(), $user->getPassword())) {
-            $user->setIsAuth(true);
-            $this->repository->save($user);
+            $this->user->setIsAuth(true);
+            $this->repository->save($this->user);
             $this->telegramService->sendCommand(TelegramService::COMMAND_EDIT_MESSAGE_TEXT, [
                 'chat_id' => $message->getChat()['id'],
                 'message_id' => $this->answerMessageId,

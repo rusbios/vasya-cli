@@ -10,13 +10,21 @@ trait AuthUserTrait
 {
     protected AllRepository $repository;
 
+    protected UserModel $user;
+
     protected function getUser(TelegramMessageDTO $message): ?UserModel
     {
+        if ($this->user->getTelegramLogin()) {
+            return $this->user;
+        }
+
         $res = $this->repository->fetch($this->user::getTableName(), [
             'telegram_login' => $message->getFrom()['username'],
             'telegram_chat_id' => $message->getChat()['id'],
         ]);
+
         foreach ($res as $model) {
+            $this->user = $model;
             return $model;
         }
 

@@ -9,7 +9,7 @@ class TelegramMessageDTO
     private array $from; //TODO
     private array $chat; //TODO
     private int $date;
-    private string $text;
+    private ?string $text;
     private ?array $entities;
 
     public function __construct(array $data)
@@ -19,7 +19,7 @@ class TelegramMessageDTO
         $this->from = $data['message']['from'];
         $this->chat = $data['message']['chat'];
         $this->date = $data['message']['date'];
-        $this->text = $data['message']['text'];
+        $this->text = $data['message']['text'] ?? null;
         $this->entities = $data['message']['entities'] ?? null;
     }
 
@@ -48,7 +48,7 @@ class TelegramMessageDTO
         return $this->date;
     }
 
-    public function getText(): string
+    public function getText(): ?string
     {
         return $this->text;
     }

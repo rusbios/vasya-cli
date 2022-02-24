@@ -3,6 +3,7 @@
 namespace RB\System\Service\TelegramBots\Command;
 
 use RB\System\App\{Config, DBFactory};
+use RB\System\App\DataBase\Model\UserModel;
 use RB\System\App\DataBase\AllRepository;
 use RB\System\Exception\CanselCommandException;
 use RB\System\Service\TelegramBots\AuthUserTrait;
@@ -17,6 +18,7 @@ class LogoutCommand extends AbstractCommand
     {
         parent::__construct($message, $service, $config);
         $this->repository = new AllRepository(DBFactory::create($config)->getConnection());
+        $this->user = new UserModel();
     }
 
     public function step(): CommandInterface
@@ -31,9 +33,9 @@ class LogoutCommand extends AbstractCommand
 
         $user = $this->getUser($message);
 
-        if ($user && $user->isAuth()) {
-            $user->setIsAuth(false);
-            $this->repository->save($user);
+        if ($user && $this->user->isAuth()) {
+            $this->user->setIsAuth(false);
+            $this->repository->save($this->user);
         }
 
         $this->telegramService->sendCommand(TelegramService::COMMAND_SEND_MESSAGE, [

@@ -27,7 +27,7 @@ class UserModel extends AbstractModel implements ModelInterface, UserRoleInterfa
         $data['telegram_chat_id'] = $this->getTelegramChatId();
         $data['role'] = $this->getRole();
         $data['password'] = $this->getPassword();
-        $data['is_auth'] = $this->isAuth();
+        $data['is_auth'] = (int)$this->isAuth();
         return $data;
     }
 

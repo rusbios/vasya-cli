@@ -15,12 +15,11 @@ class RegistrationCommand extends AbstractCommand
 
     private ?int $answerMessageId = null;
 
-    private ?UserModel $user;
-
     public function __construct(TelegramMessageDTO $message, TelegramService $service, Config $config)
     {
         parent::__construct($message, $service, $config);
         $this->repository = new AllRepository(DBFactory::create($config)->getConnection());
+        $this->user = new UserModel();
     }
 
     public function step(): CommandInterface
@@ -33,10 +32,9 @@ class RegistrationCommand extends AbstractCommand
             'message_id' => $message->getMessageId(),
         ]);
 
-        // проверяем авторизацию
-        $this->user = $this->getUser($message);
+        $this->getUser($message);
 
-        if ($this->user && $this->user->isAuth()) {
+        if ($this->user->getTelegramLogin() && $this->user->isAuth()) {
             $this->telegramService->sendCommand(TelegramService::COMMAND_SEND_MESSAGE, [
                 'chat_id' => $message->getChat()['id'],
                 'text' => 'Вы уже авторизированны',
@@ -50,7 +48,7 @@ class RegistrationCommand extends AbstractCommand
                 'text' => 'Придумайте пароль',
             ])->getBody()['result']['message_id'];
 
-            $this->user = (new UserModel())
+            $this->user
                 ->setName(trim(join(' ', [
                     $message->getFrom()['first_name'],
                     $message->getFrom()['last_name'],

@@ -4,6 +4,8 @@ namespace RB\System\App\DataBase\Connection;
 
 interface ConnectionInterface
 {
+    const DATE_TIME_FORMAT = 'Y-m-d H:i:s';
+
     const SQL_CONNECTION = 'sql';
     const SQLITE_CONNECTION = 'sqlite';
 

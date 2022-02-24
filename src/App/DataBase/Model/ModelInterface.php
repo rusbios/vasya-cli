@@ -6,8 +6,6 @@ use DateTime;
 
 interface ModelInterface
 {
-    const DATE_TIME_FORMAT = 'Y.m.d H:i:s';
-
     public static function getTableName(): string;
 
     public function getPrimaryKey(): ?int;

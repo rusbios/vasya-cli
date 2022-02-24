@@ -23,6 +23,7 @@
     "phpmailer/phpmailer": "dev-master",
     "ext-curl": "*",
     "ext-sqlite3": "*",
-    "ext-pgsql": "*"
+    "ext-pgsql": "*",
+    "ext-json": "*"
   }
 }

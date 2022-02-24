@@ -26,7 +26,10 @@ class AllRepository
 
         if ($model->getPrimaryKey()) {
             $data['update_ts'] = new DateTime();
-            $data = $this->conn->update($model->getTableName(), [], $data);
+            // TODO calc diff
+            $data = $this->conn->update($model->getTableName(), [
+                $model->getPrimaryKeyName() => $model->getPrimaryKey(),
+            ], $data);
         } else {
             $data['create_ts'] = new DateTime();
             $data[$model->getPrimaryKeyName()] = $this->conn->insert($model->getTableName(), $data);

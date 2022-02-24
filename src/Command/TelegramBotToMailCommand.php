@@ -78,7 +78,10 @@ class TelegramBotToMailCommand extends Command
                 ->addMessage($messageDTO);
         }
 
-        if (!AbstractCommand::isCommand($messageDTO->getText())) {
+        if (
+            ($messageDTO->getText() && !AbstractCommand::isCommand($messageDTO->getText()))
+            || $messageDTO->getText() === null
+        ) {
             return null;
         }
 

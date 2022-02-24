@@ -113,7 +113,7 @@ class SqLiteConnection implements ConnectionInterface
                 return $this->escape(json_encode($value));
             case 'object':
                 if ($value instanceof DateTimeInterface) {
-                    $value = $value->format('H:i:s d.m.Y');
+                    $value = $value->format(self::DATE_TIME_FORMAT);
                 }
                 return $this->escape((string)$value);
         }
